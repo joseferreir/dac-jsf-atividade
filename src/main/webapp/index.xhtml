@@ -7,6 +7,10 @@
     </h:head>
     <h:body>
         Hello from Facelets
+        <h:form>
+            <h:inputText value="#{controller.autor.nome}"/>
+            <h:commandButton value="ok" action="#{controller.savar()}"/>
+        </h:form>
     </h:body>
 </html>
 
