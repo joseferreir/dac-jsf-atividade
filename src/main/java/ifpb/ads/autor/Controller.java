@@ -24,7 +24,8 @@ public class Controller {
         //autor.setNome("jose");
         autor.setEmail("jose@gmail.com");
         service.savar(autor);
-        return null;
+        autor = new Autor();
+        return "index";
     }
 
     public Autor getAutor() {

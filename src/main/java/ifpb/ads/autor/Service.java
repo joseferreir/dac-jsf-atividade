@@ -16,7 +16,11 @@ import javax.inject.Inject;
 @RequestScoped
 public class Service {
     @Inject
-    private AutorRepositorio repositorio;
+    private AutorRepositorio repositorio ;
+
+    public Service() {
+        
+    }
     public void savar(Autor autor){
         repositorio.add(autor);
     }

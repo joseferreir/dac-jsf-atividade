@@ -38,4 +38,10 @@ public class Autor {
         this.email = email;
     }
 
+    @Override
+    public String toString() {
+        return "Autor{" + "nome=" + nome + ", email=" + email + ", cpf=" + cpf + '}';
+    }
+    
+
 }

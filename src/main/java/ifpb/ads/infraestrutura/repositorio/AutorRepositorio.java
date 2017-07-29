@@ -9,6 +9,7 @@ import ifpb.ads.autor.Autor;
 import ifpb.ads.infraestrutura.conexao.ConexaoJDBC;
 import ifpb.ads.infraestrutura.conexao.DataBaseExceptionJDBC;
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -24,7 +25,8 @@ public class AutorRepositorio implements Repositorio<Autor>{
 
     @Override
     public void add(Autor entidade) {
-        String query = "INSERT INTO Autor(CPF, nome, email) VALUES('?','?','?')";
+        String query = "INSERT INTO Autor (CPF, nome, email) VALUES(?,?,?)";
+        System.err.println("view"+entidade.toString());
         saveBD(entidade, query);
     }
 
@@ -46,24 +48,26 @@ public class AutorRepositorio implements Repositorio<Autor>{
         PreparedStatement stat = null;
         
         try {
+             System.err.println("view"+autor.toString());
              this.conn = new ConexaoJDBC();
-            stat = conn.getConnection().prepareStatement(query);
+             System.err.println("conexao "+conn.toString());
+            stat = conn.initConnection().prepareStatement(query);
             stat.setString(1,autor.getCpf().formatado());
             stat.setString(2,autor.getNome());
             stat.setString(3, autor.getEmail());
+            stat.executeUpdate();
              
         } catch (Exception e) {
             System.err.println("erron no banco: " + e.getMessage());
            
         } finally {
-            try {
-                conn.closeAll(stat);
-            } catch (DataBaseExceptionJDBC ex) {
-                Logger.getLogger(AutorRepositorio.class.getName()).log(Level.SEVERE, null, ex);
-                
-            }
-            
             //System.err.println("DAO ======= DAO ======== resultado ==============" + resultado.toString());
-        }
+            
+            try {
+                // conn.closeAll(stat);
+                stat.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(AutorRepositorio.class.getName()).log(Level.SEVERE, null, ex);
+            }        }
      }
 }

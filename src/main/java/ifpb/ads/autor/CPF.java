@@ -37,4 +37,10 @@ public class CPF {
         return this.valor.length()==11;
     }
 
+    @Override
+    public String toString() {
+        return "CPF{" + "valor=" + valor + '}';
+    }
+    
+
 }
