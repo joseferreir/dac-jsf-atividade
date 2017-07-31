@@ -39,19 +39,17 @@ public class AutorRepositorio implements Repositorio<Autor> {
 
     @Override
     public void update(Autor entidade) {
-        System.err.println("chamou update");
+        
         boolean result = false;
         PreparedStatement pst = null;
 
         try {
             conn = new ConexaoJDBC();
-            String sql = "UPDATE autor SET nome = ?, email = ?, "
-                    + "WHERE id = ?";
+            String sql = "UPDATE autor SET nome=?, email=? "
+                    + "WHERE cpf ='"+entidade.getCpf().formatado()+"'";
             pst = conn.initConnection().prepareStatement(sql);
             pst.setString(1, entidade.getNome());
             pst.setString(2, entidade.getEmail());
-            pst.setString(3, entidade.getCpf().valor());
-            pst.executeUpdate(sql);
 
         } catch (SQLException e) {
             System.err.println("Erro " + e.getMessage());
@@ -161,10 +159,10 @@ public class AutorRepositorio implements Repositorio<Autor> {
 
         try {
             conn = new ConexaoJDBC();
-            String sql = "DELETE FROM Autor WHERE cpf = ?";
+            String sql = "DELETE FROM Autor WHERE cpf = '"+key+"' ";
             ps = conn.initConnection().prepareStatement(sql);
-            ps.setString(1, key);
-            ps.executeUpdate(sql);
+            //ps.setString(1, key);
+            ps.executeUpdate();
         } catch (SQLException e) {
             System.err.println("Erro " + e.getMessage());
             Logger.getLogger(AutorRepositorio.class.getName()).log(Level.SEVERE, null, e);
