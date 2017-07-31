@@ -6,6 +6,7 @@
 package ifpb.ads.autor;
 
 import ifpb.ads.infraestrutura.repositorio.AutorRepositorio;
+import java.util.List;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
@@ -21,7 +22,11 @@ public class Service {
     public Service() {
         
     }
-    public void savar(Autor autor){
-        repositorio.add(autor);
-    }
+   public List<Autor> pesquisar() {
+		return repositorio.getEntidades();
+	}
+	
+	public Autor buscar(String id) {
+		return repositorio.getEntidade(id);
+	}
 }
