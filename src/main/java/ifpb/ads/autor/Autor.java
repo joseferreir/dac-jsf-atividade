@@ -11,6 +11,13 @@ public class Autor {
     private String email;
     private CPF cpf;
 
+    public Autor(String nome, String email, CPF cpf) {
+        this.nome = nome;
+        this.email = email;
+        this.cpf = cpf;
+    }
+    
+
     public Autor() {
     }
 

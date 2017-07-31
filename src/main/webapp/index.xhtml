@@ -1,16 +1,21 @@
-<?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
-    <h:head>
-        <title>Facelet Title</title>
-    </h:head>
-    <h:body>
-        Hello from Facelets
-        <h:form>
-            <h:inputText value="#{controller.autor.nome}"/>
-            <h:commandButton value="ok" action="#{controller.savar()}"/>
-        </h:form>
-    </h:body>
-</html>
+<!DOCTYPE html>
+<html 
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:jsf="http://xmlns.jcp.org/jsf"
+	xmlns:p="http://primefaces.org/ui"
+>
 
+    <ui:composition template="Layout.xhtml">
+	<ui:define name="head">
+		Exemplo 1: Simples
+	</ui:define>
+
+    <ui:define name="body">
+        
+    </ui:define>
+    	
+</ui:composition>
+</html>
