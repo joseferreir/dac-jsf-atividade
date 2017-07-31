@@ -21,7 +21,7 @@ public class NovoClass {
         Autor a = new Autor("maria deu certo", "maria@gmail.com", c);
         System.err.println("teste de salvar"+a.getCpf().formatado());
        // r.add(a);
-       r.update(a);
+   //    r.update(a);
      //  r.remove(c.formatado());
       //  System.err.println("en "+r.getEntidade(c.formatado()));
         
