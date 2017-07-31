@@ -73,6 +73,7 @@ public class Controller {
 
     public void editar(Autor registro) {
         this.registro = registro;
+        service.update(registro);
 
         estadoAtual = ESTADO_EDICAO;
 
@@ -89,11 +90,14 @@ public class Controller {
     }
 
     public void salvar() {
+        System.err.println("controll");
+        String msg = service.salvar(autor);
+        
         FacesContext.getCurrentInstance().addMessage(
-                null, new FacesMessage("Salvo com sucesso!"));
+                null, new FacesMessage("sftrttty"));
 
         registro = new Autor();
-        lista = new ArrayList<>();
+        lista = service.pesquisar();
 
         estadoAtual = ESTADO_PESQUISA;
 
@@ -101,6 +105,7 @@ public class Controller {
     }
 
     public void remover() {
+        service.remove(CPFValor);
         FacesContext.getCurrentInstance().addMessage(
                 null, new FacesMessage("Removido com sucesso!"));
 
@@ -117,9 +122,11 @@ public class Controller {
     }
 
     public List<Autor> getLista() {
-        Autor e = new Autor("josé", "jose@gmali.com", new CPF(("123.435.569-12")));
-        lista.add(e);
-        return lista;
+        //Autor e = new Autor("josé", "jose@gmali.com", new CPF(("123.435.569-12")));
+        
+
+         lista = service.pesquisar();
+         return lista;
     }
 
     public String getEstadoAtual() {
@@ -137,7 +144,5 @@ public class Controller {
     public void setCPFValor(String CPFValor) {
         this.CPFValor = CPFValor;
     }
-
-    
 
 }

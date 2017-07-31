@@ -33,17 +33,19 @@ public class AutorRepositorio implements Repositorio<Autor> {
     public void add(Autor entidade) {
         String query = "INSERT INTO Autor (CPF, nome, email) VALUES(?,?,?)";
         System.err.println("view" + entidade.toString());
+        System.err.println("chama salvar");
         saveBD(entidade, query);
     }
 
     @Override
     public void update(Autor entidade) {
+        System.err.println("chamou update");
         boolean result = false;
         PreparedStatement pst = null;
 
         try {
             conn = new ConexaoJDBC();
-            String sql = "UPDATE Usuario SET nome = ?, email = ?, "
+            String sql = "UPDATE autor SET nome = ?, email = ?, "
                     + "WHERE id = ?";
             pst = conn.initConnection().prepareStatement(sql);
             pst.setString(1, entidade.getNome());
@@ -67,7 +69,7 @@ public class AutorRepositorio implements Repositorio<Autor> {
     @Override
     public Autor getEntidade(String key) {
         try {
-            Autor r = buscarAutor("SELECT * autor").get(0);
+            Autor r = buscarAutor("SELECT * from autor where CPF '"+key+"' ").get(0);
 
         } catch (Exception ex) {
             Logger.getLogger(AutorRepositorio.class.getName()).log(Level.SEVERE, null, ex);
@@ -78,7 +80,7 @@ public class AutorRepositorio implements Repositorio<Autor> {
     @Override
     public List<Autor> getEntidades() {
         try {
-            List<Autor> r = buscarAutor("SELECT * autor");
+            List<Autor> r = buscarAutor("SELECT * from autor");
             return r;
         } catch (Exception ex) {
             Logger.getLogger(AutorRepositorio.class.getName()).log(Level.SEVERE, null, ex);

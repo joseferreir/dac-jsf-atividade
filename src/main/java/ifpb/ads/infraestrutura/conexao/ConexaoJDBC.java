@@ -17,7 +17,7 @@ public class ConexaoJDBC  {
 
     private Connection connection;
   //  private final String url = "jdbc:postgresql://host-banco:5432/atv_jsf";
-    private final String url = "jdbc:postgresql://postgres:host:5432/atv_jsf";
+    private final String url = "jdbc:postgresql://localhost:5432/atv_jsf";
     private final String senha = "123456";
     private final String usuario = "postgres";
 

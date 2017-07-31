@@ -18,7 +18,8 @@ public interface Repositorio<T> {
     public void update(T entidade);
 
     public T getEntidade(String key);
-     public void remove(String key);
+
+    public void remove(String key);
 
     public List<T> getEntidades();
 }
