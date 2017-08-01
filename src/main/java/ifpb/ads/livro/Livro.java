@@ -2,6 +2,7 @@ package ifpb.ads.livro;
 
 import ifpb.ads.autor.Autor;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -15,6 +16,14 @@ public class Livro {
     private String ISBN;
     private String edicao;
     private List<Autor> autores;
+
+    public Livro(String descricao, String ISBN, String edicao) {
+        this.descricao = descricao;
+        this.ISBN = ISBN;
+        this.edicao = edicao;
+         this.autores = new ArrayList<>();
+    }
+    
 
     public Livro() {
         this.autores = new ArrayList<>();
@@ -45,7 +54,7 @@ public class Livro {
     }
 
     public List<Autor> getAutores() {
-        return autores;
+        return Collections.unmodifiableList(autores);
     }
 
     public void setAutores(List<Autor> autores) {

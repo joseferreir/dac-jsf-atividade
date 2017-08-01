@@ -19,12 +19,12 @@ import javax.inject.Inject;
  * @author jose2
  */
 @RequestScoped
-public class Service {
+public class AutorService {
 
     @Inject
     private AutorRepositorio repositorio;
 
-    public Service() {
+    public AutorService() {
 
     }
 

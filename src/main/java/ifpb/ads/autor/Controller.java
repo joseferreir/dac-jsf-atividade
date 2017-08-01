@@ -24,7 +24,7 @@ public class Controller {
 
     private Autor autor = new Autor();
     @Inject
-    private Service service;
+    private AutorService service;
     private static final String ESTADO_PESQUISA = "PESQUISA";
 
     private static final String ESTADO_INSERCAO = "INSERCAO";
@@ -43,7 +43,7 @@ public class Controller {
 
     private List<Autor> lista = new ArrayList<>();
     @Inject
-    private Service contatoService;
+    private AutorService contatoService;
     private String CPFValor;
 
     @PostConstruct
