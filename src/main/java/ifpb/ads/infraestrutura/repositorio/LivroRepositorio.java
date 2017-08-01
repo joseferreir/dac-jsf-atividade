@@ -9,6 +9,7 @@ import ifpb.ads.autor.Autor;
 import ifpb.ads.autor.AutorService;
 import ifpb.ads.autor.CPF;
 import ifpb.ads.infraestrutura.conexao.ConexaoJDBC;
+import ifpb.ads.infraestrutura.conexao.DataBaseExceptionJDBC;
 import ifpb.ads.livro.Livro;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -40,6 +41,7 @@ public class LivroRepositorio implements Repositorio<Livro> {
 
     @Override
     public void update(Livro entidade) {
+        System.err.println("up livro");
 
         boolean result = false;
         PreparedStatement pst = null;
@@ -51,10 +53,15 @@ public class LivroRepositorio implements Repositorio<Livro> {
             pst = conn.initConnection().prepareStatement(sql);
             pst.setString(1, entidade.getDescricao());
             pst.setString(2, entidade.getEdicao());
+             if(pst.executeUpdate()<1)
+                 throw new Exception("Erro ao atualizar");
+
 
         } catch (SQLException e) {
             System.err.println("Erro " + e.getMessage());
             Logger.getLogger(AutorRepositorio.class.getName()).log(Level.SEVERE, null, e);
+        } catch (Exception ex) {
+            Logger.getLogger(LivroRepositorio.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
                 conn.closeAll(pst);
@@ -69,10 +76,12 @@ public class LivroRepositorio implements Repositorio<Livro> {
     public Livro getEntidade(String key) {
         StringBuffer consulta = new StringBuffer();
         System.err.println("comm "+consulta.toString());
-        consulta.append("SELECT A.nome nome, A.cpf, A.email, L.isbn, L.descricao,L.edicao");
-        consulta.append(" FROM AUTOR A, LIVRO L, AUTORLIVRO AL WHERE");
-        consulta.append("A.CPF=AL.CPFAUTOR AND L.ISBN=");
+        consulta.append("SELECT A.nome nome, A.cpf, A.email, L.isbn isbnlivro, L.descricao, L.edicao");
+        consulta.append(" FROM AUTOR A, LIVRO L, AUTORLIVRO AL WHERE ");
+        consulta.append("A.CPF=AL.CPFAUTOR AND L.ISBN='");
         consulta.append(key);
+        consulta.append("'");
+        System.err.println("consulta "+consulta.toString());
         try {
             Livro r = buscarLivro(consulta.toString()).get(0);
 
@@ -86,11 +95,12 @@ public class LivroRepositorio implements Repositorio<Livro> {
     public List<Livro> getEntidades() {
         StringBuffer consulta = new StringBuffer();
         consulta.append("SELECT A.nome nome, A.cpf, A.email, L.isbn isbnlivro, L.descricao,L.edicao");
-        consulta.append(" FROM AUTOR A, LIVRO L, AUTORLIVRO AL WHERE");
+        consulta.append(" FROM AUTOR A, LIVRO L, AUTORLIVRO AL WHERE ");
         consulta.append("A.CPF=AL.CPFAUTOR AND L.ISBN=");
-        consulta.append("AL.ISBNLIVRO");
+        consulta.append("AL.isbnlivro");
         try {
-            List<Livro> r = buscarLivro("SELECT * from autor");
+            
+            List<Livro> r = buscarLivro(consulta.toString());
             return r;
         } catch (Exception ex) {
             Logger.getLogger(AutorRepositorio.class.getName()).log(Level.SEVERE, null, ex);
@@ -109,7 +119,8 @@ public class LivroRepositorio implements Repositorio<Livro> {
             stat.setString(1, livro.getISBN());
             stat.setString(2, livro.getDescricao());
             stat.setString(3, livro.getEdicao());
-            stat.executeUpdate();
+            if(stat.executeUpdate()<1)
+                 throw new Exception("Erro ao atualixae");
 
         } catch (Exception e) {
             System.err.println("erron no banco: " + e.getMessage());
@@ -158,7 +169,6 @@ public class LivroRepositorio implements Repositorio<Livro> {
             nome = rs.getString("nome");
             email = rs.getString("email");
             cpf = rs.getString("cpf");
-
             ISBN = rs.getString("isbnlivro");
             descricao = rs.getString("descricao");
             edicao = rs.getString("edicao");
@@ -180,10 +190,14 @@ public class LivroRepositorio implements Repositorio<Livro> {
             String sql = "DELETE FROM livro WHERE isb = '" + key + "' ";
             ps = conn.initConnection().prepareStatement(sql);
             //ps.setString(1, key);
-            ps.executeUpdate();
+            if(ps.executeUpdate()<1)
+                 throw new Exception("Erro ao atualixae");
+
         } catch (SQLException e) {
             System.err.println("Erro " + e.getMessage());
             Logger.getLogger(AutorRepositorio.class.getName()).log(Level.SEVERE, null, e);
+        } catch (Exception ex) {
+            Logger.getLogger(LivroRepositorio.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
                 conn.closeAll(ps);

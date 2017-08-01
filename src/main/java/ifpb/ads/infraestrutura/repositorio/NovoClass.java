@@ -21,9 +21,9 @@ public class NovoClass {
         System.err.println(c.formatado());
         Autor a = new Autor("maria deu certo", "maria@gmail.com", c);
         System.err.println("teste de salvar"+a.getCpf().formatado());
-       // Livro l = new Livro("descriçao 3", "isbn1234564", "02");
-       // r.add(l);
-        System.err.println("busca "+r.getEntidades().get(0).getDescricao());
+        Livro l = new Livro("descriçao 4", "isbn", "23");
+        r.remove("sbn");
+        //System.err.println("busca "+r.getEntidade("isbn").getEdicao());
    //    r.update(a);
      //  r.remove(c.formatado());
       //  System.err.println("en "+r.getEntidade(c.formatado()));
