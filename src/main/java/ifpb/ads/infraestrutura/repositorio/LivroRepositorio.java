@@ -9,7 +9,6 @@ import ifpb.ads.autor.Autor;
 import ifpb.ads.autor.AutorService;
 import ifpb.ads.autor.CPF;
 import ifpb.ads.infraestrutura.conexao.ConexaoJDBC;
-import ifpb.ads.infraestrutura.conexao.DataBaseExceptionJDBC;
 import ifpb.ads.livro.Livro;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -19,12 +18,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
 /**
  *
  * @author jose2
  */
+@RequestScoped
 public class LivroRepositorio implements Repositorio<Livro> {
 
     private ConexaoJDBC conn = null;

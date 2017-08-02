@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:jsf="http://xmlns.jcp.org/jsf"
+    xmlns:p="http://primefaces.org/ui"
+    >
+
+
+    <ui:composition template="Layout.xhtml">
+        <ui:define name="head">
+
+        </ui:define>
+
+        <ui:define name="body">
+            <h:form>
+                <p:growl id="messages" />
+
+                <p:toolbar>
+                    <f:facet name="left">
+                        <p:commandButton id="novoCommandButton" value="Novo" actionListener="#{livroController.novo}"
+                                         update="@form" icon="fa fa-plus" 
+                                         />
+
+                        <p:commandButton id="limparCommandButton" value="Limpar" actionListener="#{livroController.limpar}"
+                                         rendered="#{livroController.estadoAtual ne 'EDICAO'}"
+                                         update="@form" icon="fa fa-circle-o" 
+                                         />
+
+                        <p:commandButton id="pesquisarCommandButton" value="Pesquisar" actionListener="#{livroController.pesquisar}"
+                                         rendered="#{livroController.estadoAtual eq 'PESQUISA'}"
+                                         update="@form"  icon="fa fa-search" 
+                                         />	            	
+
+                        <p:commandButton id="salvarCommandButton" value="Salvar" actionListener="#{livroController.salvar}"
+                                         rendered="#{livroController.estadoAtual eq 'INSERCAO' or livroController.estadoAtual eq 'EDICAO'}"
+                                         update="@form"  icon="fa fa-save" 
+                                         />
+
+                        <p:commandButton id="removerCommandButton" value="Remover" actionListener="#{livroController.remover}"
+                                         rendered="#{livroController.estadoAtual eq 'INSERCAO' or livroController.estadoAtual eq 'EDICAO'}"
+                                         update="@form" icon="fa fa-remove" 
+                                         />
+                    </f:facet>		 
+                </p:toolbar>
+
+                <p:defaultCommand target="salvarCommandButton" rendered="#{livroController.estadoAtual eq 'INSERCAO' or livroController.estadoAtual eq 'EDICAO'}" />
+
+                <p:defaultCommand target="pesquisarCommandButton" rendered="#{livroController.estadoAtual eq 'PESQUISA'}" />
+
+                <p:spacer height="10px" />
+
+                <p:fieldset legend="Contato">
+                    <p:panelGrid columns="2" style="width:100%" columnClasses="width200" >
+                        <p:outputLabel value="ISBN:" />
+                        <h:panelGroup>
+                            <p:inputText value="#{livroController.registro.ISBN}" 
+                                         rendered="#{livroController.estadoAtual eq 'PESQUISA'}"
+                                         />
+
+                            <h:outputText value="#{livroController.registro.ISBN}" 
+                                          rendered="#{livroController.estadoAtual eq 'INSERCAO'}"
+                                          />
+
+                            <h:outputText value="#{livroController.registro.ISBN}"
+                                          rendered="#{livroController.estadoAtual eq 'EDICAO'}"
+                                          />
+
+                        </h:panelGroup>
+                        
+
+                        <p:outputLabel value="Descrição:" />
+                        <p:inputText value="#{livroController.registro.descricao}" />
+
+                        <p:outputLabel value="Edição:" 
+                                       rendered="#{livroController.estadoAtual ne 'PESQUISA'}"
+                                       />
+                        <p:inputText value="#{livroController.registro.edicao}" 
+                                     rendered="#{livroController.estadoAtual ne 'PESQUISA'}"
+                                     />	
+
+                    </p:panelGrid>
+                </p:fieldset>
+
+                <p:spacer height="10px" />
+
+                <p:dataTable var="registro" value="#{livroController.lista}"
+                             rendered="#{livroController.estadoAtual eq 'PESQUISA'}"
+                             >
+                    <p:column headerText="#">
+                        <p:commandButton actionListener="#{livroController.editar(registro)}" 
+                                         update="@form" icon="fa fa-edit" 
+                                         />
+                    </p:column>
+
+                    <p:column headerText="ISBN">
+                        <h:outputText value="#{registro.ISBN}" />
+                    </p:column>
+
+                    <p:column headerText="Descrição">
+                        <h:outputText value="#{registro.descricao}" />
+                    </p:column>
+                    <p:column headerText="Edição">
+                        <h:outputText value="#{registro.edicao}" />
+                    </p:column>
+                    <p:column headerText="Autore(s)">
+                        <h:outputText value="#{registro.autores}" />
+                    </p:column>
+                </p:dataTable>
+            </h:form>			
+        </ui:define>
+    </ui:composition>
+</html>

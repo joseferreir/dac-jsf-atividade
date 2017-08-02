@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ifpb.ads.autor;
+package ifpb.ads.livro;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,11 +20,11 @@ import javax.inject.Named;
  */
 @Named
 @RequestScoped
-public class Controller {
+public class LivroController {
 
-    //private Autor autor = new Autor();
+    private Livro livro = new Livro();
     @Inject
-    private AutorService service;
+    private LivroService service;
     private static final String ESTADO_PESQUISA = "PESQUISA";
 
     private static final String ESTADO_INSERCAO = "INSERCAO";
@@ -39,12 +39,12 @@ public class Controller {
 
     private String acaoAtual;
 
-    private Autor registro = new Autor();
+    private Livro registro = new Livro();
 
-    private List<Autor> lista = new ArrayList<>();
+    private List<Livro> lista = new ArrayList<>();
     @Inject
-    private AutorService contatoService;
-    private String CPFValor;
+    private LivroService contatoService;
+    
 
     @PostConstruct
     public void postConstruct() {
@@ -68,10 +68,10 @@ public class Controller {
 
         acaoAtual = ACAO_SALVAR;
 
-        registro = new Autor();
+        registro = new Livro();
     }
 
-    public void editar(Autor registro) {
+    public void editar(Livro registro) {
         this.registro = registro;
         service.update(registro);
 
@@ -84,33 +84,33 @@ public class Controller {
         FacesContext.getCurrentInstance().addMessage(
                 null, new FacesMessage("Limpo"));
 
-        registro = new Autor();
+        registro = new Livro();
 
         //continua no mesmo estado
     }
 
     public void salvar() {
         System.err.println("controll");
-        this.registro.setCpf(new CPF(CPFValor));
-        String msg = service.salvar(registro);
-        
+        String msg = service.salvar(livro);
+
         FacesContext.getCurrentInstance().addMessage(
                 null, new FacesMessage(msg));
 
-        registro = new Autor();
+        registro = new Livro();
         lista = service.pesquisar();
 
         estadoAtual = ESTADO_PESQUISA;
 
         acaoAtual = ACAO_PESQUISAR;
+        registro = new Livro();
     }
 
     public void remover() {
-        service.remove(registro.getCpf().formatado());
+        service.remove(registro.getISBN());
         FacesContext.getCurrentInstance().addMessage(
                 null, new FacesMessage("Removido com sucesso!"));
 
-        registro = new Autor();
+        registro = new Livro();
         //lista = new ArrayList<>();
 
         estadoAtual = ESTADO_PESQUISA;
@@ -118,16 +118,15 @@ public class Controller {
         acaoAtual = ACAO_PESQUISAR;
     }
 
-    public Autor getRegistro() {
+    public Livro getRegistro() {
         return registro;
     }
 
-    public List<Autor> getLista() {
+    public List<Livro> getLista() {
         //Autor e = new Autor("josé", "jose@gmali.com", new CPF(("123.435.569-12")));
-        
 
-         lista = service.pesquisar();
-         return lista;
+        lista = service.pesquisar();
+        return lista;
     }
 
     public String getEstadoAtual() {
@@ -138,12 +137,5 @@ public class Controller {
         return acaoAtual;
     }
 
-    public String getCPFValor() {
-        return CPFValor;
-    }
-
-    public void setCPFValor(String CPFValor) {
-        this.CPFValor = CPFValor;
-    }
-
+   
 }
