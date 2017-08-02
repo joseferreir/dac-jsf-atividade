@@ -20,12 +20,15 @@ import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.inject.Named;
 
 /**
  *
  * @author jose2
  */
+@RequestScoped
 public class EmpLivroRepositorio implements Repositorio<Emprestimo>{
       private ConexaoJDBC conn = null;
       @Inject
@@ -50,9 +53,8 @@ public class EmpLivroRepositorio implements Repositorio<Emprestimo>{
     public Emprestimo getEntidade(String key) {
         StringBuilder consulta = new StringBuilder();
         System.err.println("comm "+consulta.toString());
-        consulta.append("SELECT * FROM Emprestimo where id = '").append(key).append("'");
-        
-        consulta.append("'");
+        consulta.append("SELECT * FROM Emprestimo where id =");
+        consulta.append(key);
         System.err.println("consulta "+consulta.toString());
         try {
             Emprestimo r = bucarEmp(consulta.toString()).get(0);
@@ -122,7 +124,7 @@ public class EmpLivroRepositorio implements Repositorio<Emprestimo>{
             ResultSet rs = pst.executeQuery();
 
             while (rs.next()) {
-                lista.add(montarlivro(rs));
+                lista.add(montarEmp(rs));
             }
 
             conn.closeAll(pst);
@@ -135,12 +137,13 @@ public class EmpLivroRepositorio implements Repositorio<Emprestimo>{
         return Collections.EMPTY_LIST;
     }
 
-    private Emprestimo montarlivro(ResultSet rs) throws SQLException {
+    private Emprestimo montarEmp(ResultSet rs) throws SQLException {
        Emprestimo e = new Emprestimo();
        e.setDataDoEmprestimo(rs.getDate("data").toLocalDate());
        e.setId(rs.getInt("id"));
        e.setNomeDoCliente("cliente");
        e.setSituacao(LivroSituacao.valueOf(rs.getString("situacao")));
+        System.err.println("vrrr "+rs.getString("isbnlivro"));
        e.setLivro(livroService.buscar(rs.getString("isbnlivro")));
        
        

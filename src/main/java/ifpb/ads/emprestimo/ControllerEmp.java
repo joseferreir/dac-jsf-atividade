@@ -3,28 +3,22 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ifpb.ads.livro;
+package ifpb.ads.emprestimo;
 
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
-import javax.inject.Named;
 
 /**
  *
  * @author jose2
  */
-@Named
-@RequestScoped
-public class LivroController {
-
-    
-    @Inject
-    private LivroService service;
+public class ControllerEmp {
+     @Inject
+    private EmprestimoService service;
     private static final String ESTADO_PESQUISA = "PESQUISA";
 
     private static final String ESTADO_INSERCAO = "INSERCAO";
@@ -39,11 +33,11 @@ public class LivroController {
 
     private String acaoAtual;
 
-    private Livro registro = new Livro();
+    private Emprestimo registro = new Emprestimo();
 
-    private List<Livro> lista = new ArrayList<>();
+    private List<Emprestimo> lista = new ArrayList<>();
     @Inject
-    private LivroService contatoService;
+    private EmprestimoService contatoService;
     
 
     @PostConstruct
@@ -68,10 +62,10 @@ public class LivroController {
 
         acaoAtual = ACAO_SALVAR;
 
-        registro = new Livro();
+        registro = new Emprestimo();
     }
 
-    public void editar(Livro registro) {
+    public void editar(Emprestimo registro) {
         this.registro = registro;
         service.update(registro);
 
@@ -84,7 +78,7 @@ public class LivroController {
         FacesContext.getCurrentInstance().addMessage(
                 null, new FacesMessage("Limpo"));
 
-        registro = new Livro();
+        registro = new Emprestimo();
 
         //continua no mesmo estado
     }
@@ -96,21 +90,21 @@ public class LivroController {
         FacesContext.getCurrentInstance().addMessage(
                 null, new FacesMessage(msg));
 
-        registro = new Livro();
+        registro = new Emprestimo();
         lista = service.pesquisar();
 
         estadoAtual = ESTADO_PESQUISA;
 
         acaoAtual = ACAO_PESQUISAR;
-        registro = new Livro();
+        registro = new Emprestimo();
     }
 
     public void remover() {
-        service.remove(registro.getISBN());
+        service.remove(String.valueOf(registro.getId()));
         FacesContext.getCurrentInstance().addMessage(
                 null, new FacesMessage("Removido com sucesso!"));
 
-        registro = new Livro();
+        registro = new Emprestimo();
         //lista = new ArrayList<>();
 
         estadoAtual = ESTADO_PESQUISA;
@@ -118,11 +112,11 @@ public class LivroController {
         acaoAtual = ACAO_PESQUISAR;
     }
 
-    public Livro getRegistro() {
+    public Emprestimo getRegistro() {
         return registro;
     }
 
-    public List<Livro> getLista() {
+    public List<Emprestimo> getLista() {
         //Autor e = new Autor("josé", "jose@gmali.com", new CPF(("123.435.569-12")));
 
         lista = service.pesquisar();
@@ -137,5 +131,4 @@ public class LivroController {
         return acaoAtual;
     }
 
-   
 }

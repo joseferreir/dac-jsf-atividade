@@ -16,17 +16,19 @@ import ifpb.ads.livro.Livro;
 public class NovoClass {
     
     public static void main(String[] args) {
-        LivroRepositorio r = new LivroRepositorio();
-        CPF c = new CPF("132.421.432-45");
-        System.err.println(c.formatado());
-        Autor a = new Autor("maria deu certo", "maria@gmail.com", c);
-        System.err.println("teste de salvar"+a.getCpf().formatado());
-        Livro l = new Livro("descriçao 4", "isbn", "23");
-        r.remove("sbn");
+//        LivroRepositorio r = new LivroRepositorio();
+//        CPF c = new CPF("132.421.432-45");
+//        System.err.println(c.formatado());
+//        Autor a = new Autor("maria deu certo", "maria@gmail.com", c);
+//        System.err.println("teste de salvar"+a.getCpf().formatado());
+//        Livro l = new Livro("descriçao 4", "isbn", "23");
+//        r.remove("sbn");
         //System.err.println("busca "+r.getEntidade("isbn").getEdicao());
    //    r.update(a);
      //  r.remove(c.formatado());
       //  System.err.println("en "+r.getEntidade(c.formatado()));
+      EmpLivroRepositorio er = new EmpLivroRepositorio();
+        System.err.println("res "+er.getEntidade(String.valueOf(1)).getDataDoEmprestimo());
         
     }
     

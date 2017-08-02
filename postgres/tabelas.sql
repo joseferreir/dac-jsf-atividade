@@ -14,7 +14,14 @@ CREATE TABLE AutorLivro(
 	FOREIGN KEY (CPFAutor) REFERENCES Autor (CPF),
 	FOREIGN KEY (ISBNLivro) REFERENCES livro (ISBN),
 	PRIMARY KEY(ISBNLivro,CPFAutor)
+);
+REATE TABLE Emprestimo(
+	id serial PRIMARY KEY ,
+	data DATE,
+	cliente VARCHAR(50),	
+	isbnlivro VARCHAR(18) NOT NULL UNIQUE,
+	situacao VARCHAR(12),
+	FOREIGN KEY (ISBNLivro) REFERENCES livro (ISBN)
 )
-
 	
 	
