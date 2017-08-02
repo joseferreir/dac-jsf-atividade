@@ -5,100 +5,72 @@
  */
 package ifpb.ads.infraestrutura.repositorio;
 
-import ifpb.ads.autor.Autor;
-import ifpb.ads.autor.AutorService;
-import ifpb.ads.autor.CPF;
+import ifpb.ads.emprestimo.Emprestimo;
+import ifpb.ads.emprestimo.LivroSituacao;
 import ifpb.ads.infraestrutura.conexao.ConexaoJDBC;
-import ifpb.ads.livro.Livro;
+import ifpb.ads.livro.LivroService;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
 /**
  *
  * @author jose2
  */
-@RequestScoped
-public class LivroRepositorio implements Repositorio<Livro> {
-
-    private ConexaoJDBC conn = null;
+public class EmpLivroRepositorio implements Repositorio<Emprestimo>{
+      private ConexaoJDBC conn = null;
+      @Inject
+      private LivroService livroService;
     @Override
-    public void add(Livro entidade) {
-        String query = "INSERT INTO livro (ISBN, descricao, edicao) VALUES(?,?,?)";
+    public void add(Emprestimo entidade) {
+        String query = "INSERT INTO emprestimo (data, cliente, isbnlivro, situacao) VALUES(?,?,?,?)";
         System.err.println("view" + entidade.toString());
         System.err.println("chama salvar");
         saveBD(entidade, query);
     }
 
     @Override
-    public void update(Livro entidade) {
+    public void update(Emprestimo entidade) {
         System.err.println("up livro");
-
-        boolean result = false;
-        PreparedStatement pst = null;
-
-        try {
-            conn = new ConexaoJDBC();
-            String sql = "UPDATE livro SET descricao=?, edicao=? "
-                    + "WHERE ISBN ='" + entidade.getISBN() + "'";
-            pst = conn.initConnection().prepareStatement(sql);
-            pst.setString(1, entidade.getDescricao());
-            pst.setString(2, entidade.getEdicao());
-             if(pst.executeUpdate()<1)
-                 throw new Exception("Erro ao atualizar");
-
-
-        } catch (SQLException e) {
-            System.err.println("Erro " + e.getMessage());
-            Logger.getLogger(AutorRepositorio.class.getName()).log(Level.SEVERE, null, e);
-        } catch (Exception ex) {
-            Logger.getLogger(LivroRepositorio.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            try {
-                conn.closeAll(pst);
-            } catch (Exception ex) {
-                Logger.getLogger(AutorRepositorio.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+        String query = "UODATE Emprestimo SET data=?, cliente=?, isbnlivro=?, situacao=? WHERE id=?";
+        saveBD(entidade,query );
 
     }
 
     @Override
-    public Livro getEntidade(String key) {
-        StringBuffer consulta = new StringBuffer();
+    public Emprestimo getEntidade(String key) {
+        StringBuilder consulta = new StringBuilder();
         System.err.println("comm "+consulta.toString());
-        consulta.append("SELECT A.nome nome, A.cpf, A.email, L.isbn isbnlivro, L.descricao, L.edicao");
-        consulta.append(" FROM AUTOR A, LIVRO L, AUTORLIVRO AL WHERE ");
-        consulta.append("A.CPF=AL.CPFAUTOR AND L.ISBN='");
-        consulta.append(key);
+        consulta.append("SELECT * FROM Emprestimo where id = '").append(key).append("'");
+        
         consulta.append("'");
         System.err.println("consulta "+consulta.toString());
         try {
-            Livro r = buscarLivro(consulta.toString()).get(0);
+            Emprestimo r = bucarEmp(consulta.toString()).get(0);
 
         } catch (Exception ex) {
             Logger.getLogger(AutorRepositorio.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return new Livro();
+        return new Emprestimo();
     }
 
     @Override
-    public List<Livro> getEntidades() {
+    public List<Emprestimo> getEntidades() {
         StringBuffer consulta = new StringBuffer();
-        consulta.append("SELECT A.nome nome, A.cpf, A.email, L.isbn isbnlivro, L.descricao,L.edicao");
-        consulta.append(" FROM AUTOR A, LIVRO L, AUTORLIVRO AL WHERE ");
-        consulta.append("A.CPF=AL.CPFAUTOR AND L.ISBN=");
-        consulta.append("AL.isbnlivro");
+        consulta.append("SELECT * FROM Emprestimo");
+        
         try {
             
-            List<Livro> r = buscarLivro(consulta.toString());
+            List<Emprestimo> r = bucarEmp(consulta.toString());
             return r;
         } catch (Exception ex) {
             Logger.getLogger(AutorRepositorio.class.getName()).log(Level.SEVERE, null, ex);
@@ -106,17 +78,20 @@ public class LivroRepositorio implements Repositorio<Livro> {
         return Collections.EMPTY_LIST;
     }
 
-    private void saveBD(Livro livro, String query) {
+    private void saveBD(Emprestimo emp, String query) {
         PreparedStatement stat = null;
 
         try {
-            System.err.println("view" + livro.toString());
+            
             this.conn = new ConexaoJDBC();
             System.err.println("conexao " + conn.toString());
             stat = conn.initConnection().prepareStatement(query);
-            stat.setString(1, livro.getISBN());
-            stat.setString(2, livro.getDescricao());
-            stat.setString(3, livro.getEdicao());
+            stat.setDate(1,Date.valueOf(emp.getDataDoEmprestimo()));
+            stat.setString(2, emp.getNomeDoCliente());
+            stat.setString(3, emp.getLivro().getISBN());
+            stat.setString(4, LivroSituacao.EMPRESTADO.name());
+            if(emp.getId()>0)
+                stat.setInt(5, emp.getId());
             if(stat.executeUpdate()<1)
                  throw new Exception("Erro ao atualixae");
 
@@ -135,8 +110,8 @@ public class LivroRepositorio implements Repositorio<Livro> {
         }
     }
 
-    private List<Livro> buscarLivro(String sql) throws Exception {
-        List<Livro> lista = new ArrayList<>();
+    private List<Emprestimo> bucarEmp(String sql) throws Exception {
+        List<Emprestimo> lista = new ArrayList<>();
 
         PreparedStatement pst = null;
 
@@ -160,23 +135,16 @@ public class LivroRepositorio implements Repositorio<Livro> {
         return Collections.EMPTY_LIST;
     }
 
-    private Livro montarlivro(ResultSet rs) {
-        String ISBN = "", descricao = "", edicao = "";
-        String nome = "", email = "", cpf = "";
-        try {
-            nome = rs.getString("nome");
-            email = rs.getString("email");
-            cpf = rs.getString("cpf");
-            ISBN = rs.getString("isbnlivro");
-            descricao = rs.getString("descricao");
-            edicao = rs.getString("edicao");
-
-        } catch (SQLException ex) {
-            Logger.getLogger(AutorRepositorio.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        Livro livro = new Livro(descricao, ISBN, edicao);
-        livro.adicionarAutor(new Autor(nome, email,new CPF(cpf)));
-        return livro;
+    private Emprestimo montarlivro(ResultSet rs) throws SQLException {
+       Emprestimo e = new Emprestimo();
+       e.setDataDoEmprestimo(rs.getDate("data").toLocalDate());
+       e.setId(rs.getInt("id"));
+       e.setNomeDoCliente("cliente");
+       e.setSituacao(LivroSituacao.valueOf(rs.getString("situacao")));
+       e.setLivro(livroService.buscar(rs.getString("isbnlivro")));
+       
+       
+       return e;
     }
 
     @Override
@@ -185,11 +153,11 @@ public class LivroRepositorio implements Repositorio<Livro> {
 
         try {
             conn = new ConexaoJDBC();
-            String sql = "DELETE FROM livro WHERE isb = '" + key + "' ";
+            String sql = "DELETE FROM emprestimo WHERE id = '" + key + "' ";
             ps = conn.initConnection().prepareStatement(sql);
             //ps.setString(1, key);
             if(ps.executeUpdate()<1)
-                 throw new Exception("Erro ao atualixae");
+                 throw new Exception("Erro ao remover");
 
         } catch (SQLException e) {
             System.err.println("Erro " + e.getMessage());

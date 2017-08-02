@@ -34,8 +34,8 @@ public class LivroService {
         return repositorio.getEntidades();
     }
 
-    public Livro buscar(String id) {
-        return repositorio.getEntidade(id);
+    public Livro buscar(String isbn) {
+        return repositorio.getEntidade(isbn);
     }
 
     public String update(Livro entidade) {
