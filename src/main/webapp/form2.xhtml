@@ -18,90 +18,50 @@
             <h:form>
                 <p:growl id="messages" />
 
-                <p:toolbar>
-                    <f:facet name="left">
-                        <p:commandButton id="novoCommandButton" value="Novo" actionListener="#{controller.novo()}"
-                                         update="@form" icon="fa fa-plus" 
-                                         />
+                <p:outputLabel value="CPF" />
+                <p:inputText value="#{controller.CPFValor}"/>
+                <br/>
+                <p:outputLabel  value="nome" />
+                <p:inputText  value="#{controller.registro.nome}"/>
+                <br/>
+                <p:outputLabel value="email" />
+                <p:inputText value="#{controller.registro.email}"/>
+                <br/>
+                <p:commandButton value="save" action="#{controller.salvar()}"/>
+              
+                <h:dataTable value="#{controller.lista}" var="o" 
+    			styleClass="order-table"
+    			headerClass="order-table-header"
+    			rowClasses="order-table-odd-row,order-table-even-row"
+    		>
 
-                        <p:commandButton id="limparCommandButton" value="Limpar" actionListener="#{controller.limpar}"
-                                         rendered="#{controller.estadoAtual ne 'EDICAO'}"
-                                         update="@form" icon="fa fa-circle-o" 
-                                         />
+    			<h:column>
+    				<!-- column header -->
+    				<f:facet name="header">Nome</f:facet>
+    				<!-- row record -->
+    				#{o.nome}
+    			</h:column>
 
-                        <p:commandButton id="pesquisarCommandButton" value="Pesquisar" actionListener="#{controller.pesquisar()}"
-                                         rendered="#{controller.estadoAtual eq 'PESQUISA'}"
-                                         update="@form"  icon="fa fa-search" 
-                                         />	            	
+    			<h:column>
+    				<f:facet name="header">CPF</f:facet>
+    				#{o.cpf.formatado()}
+    			</h:column>
 
-                        <p:commandButton id="salvarCommandButton" value="Salvar" actionListener="#{controller.salvar()}"
-                                         rendered="#{controller.estadoAtual eq 'INSERCAO' or controller.estadoAtual eq 'EDICAO'}"
-                                         update="@form"  icon="fa fa-save" 
-                                         />
+    			<h:column>
+    				<f:facet name="header">Email</f:facet>
+    				#{o.email}
+    			</h:column>
+                    <h:column>
+    				
+                        <p:commandButton value="remove" action="#{controller.remover(o)}"/>
+    			</h:column>
+                     <h:column>
+    				
+                         <p:commandButton value="atualizar" action="#{controller.editar(o)}"/>
+    			</h:column>
 
-                        <p:commandButton id="removerCommandButton" value="Remover" actionListener="#{controller.remover}"
-                                         rendered="#{controller.estadoAtual eq 'INSERCAO' or controller.estadoAtual eq 'EDICAO'}"
-                                         update="@form" icon="fa fa-remove" 
-                                         />
-                    </f:facet>		 
-                </p:toolbar>
-
-                <p:defaultCommand target="#{controller.acaoAtual}" />		    
-
-                <p:spacer height="10px" />
-
-                <p:fieldset legend="Autor">
-                    <p:panelGrid columns="6" style="width:100%" columnClasses="width200" >
-                        <p:outputLabel value="CPF:" />
-                        <h:panelGroup>
-                            <p:inputText value="#{controller.CPFValor}" 
-                                         rendered="#{controller.estadoAtual eq 'PESQUISA'}"
-                                         />
-
-                            <h:inputText value="#{controller.registro.cpf}" 
-                                         rendered="#{controller.estadoAtual eq 'INSERCAO'}"
-                                         />
-
-                            <h:outputText value="#{controller.registro.cpf}"
-                                          rendered="#{controller.estadoAtual eq 'EDICAO'}"
-                                          />
-
-                        </h:panelGroup>
-
-                        <p:outputLabel value="Nome:" />
-                        <p:inputText value="#{controller.registro.nome}" />
-
-                        <p:outputLabel value="Email:" 
-                                       rendered="#{controller.estadoAtual ne 'PESQUISA'}"
-                                       />
-                        <p:inputText value="#{controller.registro.email}" 
-                                     rendered="#{controller.estadoAtual ne 'PESQUISA'}"
-                                     />					
-                    </p:panelGrid>
-                </p:fieldset>
-
-                <p:spacer height="10px" />
-
-                <p:dataTable var="registro" value="#{controller.lista}"
-                             rendered="#{controller.estadoAtual eq 'PESQUISA'}"
-                             >
-                    <p:column headerText="#">
-                        <p:commandButton actionListener="#{controller.editar(registro)}" 
-                                         update="@form" icon="fa fa-edit" 
-                                         />
-                    </p:column>
-
-                    <p:column headerText="CPF">
-                        <h:outputText value="#{registro.cpf.formatado()}" />
-                    </p:column>
-
-                    <p:column headerText="Nome">
-                        <h:outputText value="#{registro.nome}" />
-                    </p:column>
-                    <p:column headerText="Email">
-                        <h:outputText value="#{registro.email}" />
-                    </p:column>
-                </p:dataTable>
+    		</h:dataTable>
+              
             </h:form>			
         </ui:define>
     </ui:composition>

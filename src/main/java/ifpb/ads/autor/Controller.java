@@ -97,7 +97,7 @@ public class Controller {
         FacesContext.getCurrentInstance().addMessage(
                 null, new FacesMessage(msg));
 
-        registro = new Autor();
+        limpar();
         lista = service.pesquisar();
 
         estadoAtual = ESTADO_PESQUISA;
@@ -105,8 +105,8 @@ public class Controller {
         acaoAtual = ACAO_PESQUISAR;
     }
 
-    public void remover() {
-        service.remove(registro.getCpf().formatado());
+    public void remover(Autor autor) {
+        service.remove(autor.getCpf().formatado());
         FacesContext.getCurrentInstance().addMessage(
                 null, new FacesMessage("Removido com sucesso!"));
 
