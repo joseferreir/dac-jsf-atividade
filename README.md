@@ -20,7 +20,7 @@ Use:
 ``` shell
 #### Faça o clone 
 * git clone https://github.com/joseferreir/dac-jsf-atividade.git
-* Dentro da pasta do projeto execulte o comandos
+* Dentro da pasta do projeto execulte os comandos
 
 mvn clean install 
 docker-compose up -d
