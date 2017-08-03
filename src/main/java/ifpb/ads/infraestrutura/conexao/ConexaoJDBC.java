@@ -14,10 +14,10 @@ import java.util.logging.Logger;
 
 
 public class ConexaoJDBC  {
-
+  String driver = "org.postgresql.Driver";
     private Connection connection;
-  //  private final String url = "jdbc:postgresql://host-banco:5432/atv_jsf";
-    private final String url = "jdbc:postgresql://localhost:5432/atv_jsf";
+    private final String url = "jdbc:postgresql://host-banco:5432/atv_jsf";
+  //  private final String url = "jdbc:postgresql://localhost:5432/atv_jsf";
     private final String senha = "123456";
     private final String usuario = "postgres";
 
@@ -27,6 +27,11 @@ public class ConexaoJDBC  {
 
     public Connection initConnection() {
         try {
+            try {
+                Class.forName("org.postgresql.Driver");
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(ConexaoJDBC.class.getName()).log(Level.SEVERE, null, ex);
+            }
             connection = DriverManager.getConnection(url, usuario, senha);
         } catch (SQLException ex) {
             Logger.getLogger(ConexaoJDBC.class.getName()).log(Level.SEVERE, null, ex);
