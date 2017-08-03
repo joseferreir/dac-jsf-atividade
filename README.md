@@ -29,5 +29,5 @@ docker-compose up -d
 
 Acesse:
 
-[http://http://localhost:8080/dac-jsf-pratica/](http://http://localhost:8080/dac-jsf-pratica/S)
+[http://http://localhost:8080/dac-jsf-pratica/](http://http://localhost:8080/dac-jsf-pratica/)
 
